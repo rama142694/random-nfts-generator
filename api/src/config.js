@@ -1,6 +1,6 @@
 const description =
   "This is the description of your NFT project, remember to replace this";
-const baseUri = "https://hashlips/nft";
+const baseUri = "ipfs://NewUriToReplace";
 
 const layersOrder = [
   { name: "Background" },

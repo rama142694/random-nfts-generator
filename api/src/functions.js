@@ -26,6 +26,8 @@ const buildSetup = () => {
     fs.rmdirSync(buildDir, { recursive: true });
   }
   fs.mkdirSync(buildDir);
+  fs.mkdirSync(`${buildDir}/json`)
+  fs.mkdirSync(`${buildDir}/images`)
 };
 
 const cleanName = (_str) => {
@@ -68,7 +70,7 @@ const layersSetup = (layersOrder) => {
 
 const saveImage = (_editionCount) => {
   fs.writeFileSync(
-    `${buildDir}/${_editionCount}.png`,
+    `${buildDir}/images/${_editionCount}.png`,
     canvas.toBuffer("image/png")
   );
 };
@@ -184,12 +186,12 @@ const reWriteDna = (_dna) => {
 }
 
 const writeMetaData = (_data) => {
-  fs.writeFileSync(`${buildDir}/_metadata.json`, _data);
+  fs.writeFileSync(`${buildDir}/json/_metadata.json`, _data);
 };
 
 const saveMetaDataSingleFile = (_editionCount) => {
   fs.writeFileSync(
-    `${buildDir}/${_editionCount}.json`,
+    `${buildDir}/json/${_editionCount}.json`,
     JSON.stringify(metadataList.find((meta) => meta.edition == _editionCount))
   );
 };
@@ -238,8 +240,6 @@ const mintNfts = async () => {
   }
   writeMetaData(JSON.stringify(metadataList));
 };
-
-mintNfts();
 
 module.exports = {
     mintNfts,
