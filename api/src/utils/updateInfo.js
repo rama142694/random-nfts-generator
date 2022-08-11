@@ -8,7 +8,7 @@ async function UpdateMetadata(newCDI){
     console.log('Updating Nfts images Metadata...');
   
     data.forEach((item, index) => {
-      item.image = `ipfs.io/ipfs/${newCDI[index].path}`;
+      item.image = `ipfs.io/ipfs/${newCDI[index]}`;
   
       let edition = item.name.replace('#','');
     

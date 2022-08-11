@@ -40,7 +40,7 @@ let CreateNfts = async (amount) => {
     await SaveFile().then(async () => {
         console.log('Finish Saving Files in Ipfs...');
         console.log('Minting Nfts...');
-        await mintNfts(hivejs, 'rama142694');
+        await mintNfts(hivejs, "rama142694");
         console.log('Finish Minting Nfts...');
     });
 }
