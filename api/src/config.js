@@ -1,5 +1,3 @@
-const description =
-  "This is the description of your NFT project, remember to replace this";
 const baseUri = "ipfs://NewUriToReplace";
 
 const layersOrder = [
@@ -11,6 +9,12 @@ const layersOrder = [
   { name: "Bottom lid" },
   { name: "Top lid" },
 ];
+
+const raritiesProbabilities = {
+  original: 0.5,
+  rare: 0.7,
+  epic: 0.95,
+}
 
 const format = {
   width: 512,
@@ -31,7 +35,7 @@ module.exports = {
   format,
   editionSize,
   baseUri,
-  description,
   background,
   uniqueDnaTorrance,
+  raritiesProbabilities
 };

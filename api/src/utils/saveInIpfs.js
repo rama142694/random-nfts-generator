@@ -1,8 +1,6 @@
 const {create} = require('ipfs-http-client');
 const fs = require('fs');
 const { UpdateMetadata } = require('./updateInfo.js');
-const { rejects } = require('assert');
-const { resolve } = require('path');
 
 async function ipfsClient() {
     const ipfs = await create({
@@ -14,24 +12,32 @@ async function ipfsClient() {
 }
 
 async function SaveFile() {
-    let ipfs = await ipfsClient();
-
-    fs.readdir('./build/images/', async (err,result) => {
-
-        let newCdis = [];
-        for(var i=0; i < result.length; i++){
-            const cdi = await new Promise(async (resolve,reject) => {
-                await fs.readFile(`./build/images/${result[i]}`,async (err,res) => {
-                    let uploaded = await ipfs.add(res)
-                    
-                    resolve(uploaded);
-                })
-            })
-            newCdis.push(cdi);
-        }
-        
-        UpdateMetadata(newCdis)
+    return await new Promise(async (res,rej) => {
+        console.log('Working in saving Files in ipfs...')
+    
+        let ipfs = await ipfsClient();
+    
+        fs.readdir('./build/images/', async (err,result) => {
+                let newCdis = [];
+                for(var i=0; i < result.length; i++){
+                    const cdi = await new Promise(async (resolve,reject) => {
+                        fs.readFile(`./build/images/${result[i]}`,async (err,res) => {
+                            let uploaded = await ipfs.add(res);
+                            resolve(uploaded);
+                        })
+                    })
+                    newCdis.push(cdi);
+                }
+    
+                console.log(newCdis);
+                console.log('Files saved in IPFS.')
+                await UpdateMetadata(newCdis);
+                console.log('Termine');
+                res();
+        })
     })
 }
 
-SaveFile();
+module.exports = {
+    SaveFile
+}

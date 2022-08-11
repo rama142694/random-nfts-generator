@@ -9,21 +9,20 @@ const {
   layersOrder,
   format,
   baseUri,
-  description,
   background,
   uniqueDnaTorrance,
-  editionSize,
+  raritiesProbabilities
 } = require(`${basePath}/src/config.js`);
+const { getLastNftMinted } = require('./utils/getLastEdition.js');
 const console = require("console");
 const canvas = createCanvas(format.width, format.height);
 const ctx = canvas.getContext("2d");
 var metadataList = [];
-var attributesList = [];
 var dnaList = [];
 
 const buildSetup = () => {
   if (fs.existsSync(buildDir)) {
-    fs.rmdirSync(buildDir, { recursive: true });
+    fs.rmSync(buildDir, { recursive: true });
   }
   fs.mkdirSync(buildDir);
   fs.mkdirSync(`${buildDir}/json`)
@@ -87,28 +86,12 @@ const drawBackground = () => {
 };
 
 const addMetadata = (_dna, _edition) => {
-  let dateTime = Date.now();
   let tempMetadata = {
     dna: _dna.join(""),
     name: `#${_edition}`,
-    description: description,
-    image: `${baseUri}/${_edition}.png`,
-    edition: _edition,
-    date: dateTime,
-    attributes: attributesList,
-    compiler: "HashLips Art Engine",
+    image: `${baseUri}`,
   };
   metadataList.push(tempMetadata);
-  attributesList = [];
-};
-
-const addAttributes = (_element) => {
-  let selectedElement = _element.layer.selectedElement;
-  attributesList.push({
-    trait_type: _element.layer.name,
-    rarity: _element.layer.rarity,
-    value: selectedElement.name,
-  });
 };
 
 const loadLayerImg = async (_layer) => {
@@ -120,7 +103,6 @@ const loadLayerImg = async (_layer) => {
 
 const drawElement = (_element) => {
   ctx.drawImage(_element.loadedImage, 0, 0, format.width, format.height);
-  addAttributes(_element);
 };
 
 const constructLayerToDna = (_dna = [], _layers = []) => {
@@ -146,11 +128,11 @@ const selectRarity = (rarities) => {
         let selectedRarity;
         const randomNumber = Math.random();
         
-        if(randomNumber <= 0.5)
+        if(randomNumber <= raritiesProbabilities.original)
         selectedRarity = "original";
-        else if(randomNumber <= 0.7)
+        else if(randomNumber <= raritiesProbabilities.rare)
         selectedRarity = "rare";
-        else if(randomNumber <= 0.9)
+        else if(randomNumber <= raritiesProbabilities.epic)
         selectedRarity = "epic";
         else selectedRarity = "legendary";
 
@@ -192,15 +174,16 @@ const writeMetaData = (_data) => {
 const saveMetaDataSingleFile = (_editionCount) => {
   fs.writeFileSync(
     `${buildDir}/json/${_editionCount}.json`,
-    JSON.stringify(metadataList.find((meta) => meta.edition == _editionCount))
+    JSON.stringify(metadataList.find((meta) => meta.name == `#${_editionCount}`))
   );
 };
 
-const mintNfts = async () => {
+const createImages = async (nftsAmount) => {
+  let lastEdition = await getLastNftMinted();
   let editionCount = 1;
   let failedCount = 0;
   const layers = layersSetup(layersOrder);
-  while (editionCount <= editionSize) {
+  while (editionCount <= nftsAmount) {
     let newDna = createDna(layers);
     let numericDna = reWriteDna(newDna);
     if (isDnaUnique(dnaList, numericDna)) {
@@ -219,10 +202,10 @@ const mintNfts = async () => {
         elementArray.forEach((element) => {
           drawElement(element);
         });
-        saveImage(editionCount);
-        addMetadata(numericDna, editionCount);
-        saveMetaDataSingleFile(editionCount);
-        console.log(`Created edition: ${editionCount}, with DNA: ${numericDna}`);
+        saveImage(editionCount + lastEdition);
+        addMetadata(numericDna, editionCount + lastEdition);
+        saveMetaDataSingleFile(editionCount + lastEdition);
+        console.log(`Created edition: ${editionCount + lastEdition}, with DNA: ${numericDna}`);
       });
 
       dnaList.push(numericDna);
@@ -232,7 +215,7 @@ const mintNfts = async () => {
       failedCount++;
       if (failedCount >= uniqueDnaTorrance) {
         console.log(
-          `You need more layers or elements to generate ${editionSize} artworks!`
+          `You need more layers or elements to generate ${nftsAmount} artworks!`
         );
         process.exit();
       }
@@ -242,6 +225,6 @@ const mintNfts = async () => {
 };
 
 module.exports = {
-    mintNfts,
-    buildSetup
+  createImages,
+  buildSetup,
 }
