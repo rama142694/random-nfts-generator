@@ -1,13 +1,18 @@
+//For mint and search your nfts.
+const CONTRACT_CREATOR = "The contract that create the nfts, if you dont have a contract is your hive account name";
+const UTILITY_TOKEN_SYMBOL = "The symbol of your nfts";
+const ACTIVEKEY = 'Your Active private key from your hive account';
+
+//Saving in ipfs.
+const IpfsToken = 'Your token from NFT Storage.';
 const baseUri = "ipfs://NewUriToReplace";
 
+
+//Creating the NFT Images
 const layersOrder = [
-  { name: "Background" },
-  { name: "Eyeball" },
-  { name: "Eye color" },
-  { name: "Iris" },
-  { name: "Shine" },
-  { name: "Bottom lid" },
-  { name: "Top lid" },
+  { name: "Layer 1" },
+  { name: "Layer 2" },
+  { name: "Layer 3" },
 ];
 
 const raritiesProbabilities = {
@@ -28,12 +33,13 @@ const background = {
 
 const uniqueDnaTorrance = 10000;
 
-const editionSize = 5;
-
 module.exports = {
+  CONTRACT_CREATOR,
+  UTILITY_TOKEN_SYMBOL,
+  ACTIVEKEY,
+  IpfsToken,
   layersOrder,
   format,
-  editionSize,
   baseUri,
   background,
   uniqueDnaTorrance,

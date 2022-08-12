@@ -15,13 +15,10 @@ app.use(express.json({
     type: "*/*"
 }));
 
-app.get('/', (request, response) => {
-    response.send("<h1>Hello Rama</h1>");
-});
-
 app.post('/', (request, response) => {
     const amount = request.body.amount;
-    CreateNfts(amount);
+    const account = request.body.account;
+    CreateNfts(amount, account);
 });
 
 const PORT = 3001;
@@ -29,7 +26,7 @@ app.listen(PORT, () => {
     console.log(`Api escuchando en el puerto ${PORT}`);
 });
 
-let CreateNfts = async (amount) => {
+let CreateNfts = async (amount, account) => {
     console.log('Building Setup...');
     buildSetup();
     console.log('Finish Building Setup...');
@@ -40,7 +37,7 @@ let CreateNfts = async (amount) => {
     await SaveFile().then(async () => {
         console.log('Finish Saving Files in Ipfs...');
         console.log('Minting Nfts...');
-        await mintNfts(hivejs, "rama142694");
+        await mintNfts(hivejs, account);
         console.log('Finish Minting Nfts...');
     });
 }

@@ -2,14 +2,13 @@ const {create} = require('ipfs-http-client');
 const fs = require('fs');
 const { UpdateMetadata } = require('./updateInfo.js');
 const { NFTStorage, Blob } = require('nft.storage');
-
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDFFNEZlNUZhRDk0YTVjODNEM2MyODJjNGIyNDI1NmFkMDE3OUMyMzQiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY2MDIyNzM0MjM2NCwibmFtZSI6Imhhc2hraW5nc1Rlc3QifQ.DFqJor80e3kyxGVXBdNV_2WUOFkNYxescgruahf8ITY';
+const { IpfsToken } = require('../config.js');
 
 async function SaveFile() {
     return await new Promise(async (res,rej) => {
         console.log('Working in saving Files in ipfs...')
 
-        const storage = new NFTStorage({ token })
+        const storage = new NFTStorage({ IpfsToken })
     
         fs.readdir('./build/images/', async (err,result) => {
             result = result.map(img => parseInt(img.replace('.png','')));
@@ -22,6 +21,7 @@ async function SaveFile() {
                 const cdi = await new Promise(async (resolve,reject) => {
                     fs.readFile(`./build/images/${orderResult[i]}.png`,async (err,res) => {
                         let uploaded = await storage.storeBlob(new Blob([res]));
+                        console.log(`File ${i} saved.`);
                         resolve(uploaded);
                     })
                 })

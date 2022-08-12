@@ -1,12 +1,10 @@
 const basePath = process.cwd();
 const fs = require("fs");
-var hivejs = require("@hiveio/hive-js");
-
-//CONFIG
-const account = "The account you will send the nfts";
-const CONTRACT_CREATOR = "rama142694";
-const UTILITY_TOKEN_SYMBOL = "RAMANFTS";
-const ACTIVEKEY = '5KQfGLxvZCiw6RUh83bUbbakzSP11637nz71kYx7UKYkimzamaQ';
+const {
+  CONTRACT_CREATOR,
+  UTILITY_TOKEN_SYMBOL,
+  ACTIVEKEY
+} = require('../config.js');
 
 async function mintNfts(hive, user) {
   let rawdata = fs.readFileSync(`${basePath}/build/json/_metadata.json`);

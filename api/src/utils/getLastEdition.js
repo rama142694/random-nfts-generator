@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { UTILITY_TOKEN_SYMBOL } = require('../config.js');
 
 function isNullOrEmpty(variable) {
     return variable === null || variable === undefined;
@@ -59,7 +60,7 @@ async function getLastNftMinted() {
           let get_nfts = await queryContract(
             {
               contract: 'nft',
-              table: 'RAMANFTS' + 'instances',
+              table: UTILITY_TOKEN_SYMBOL + 'instances',
               query: {
                 
               },

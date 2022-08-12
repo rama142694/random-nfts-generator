@@ -6,6 +6,7 @@ mintButton.addEventListener('click', (e) => {
 
 function MintNfts(){
     const nftsAmount = document.getElementById('amount-nfts').value;
+    const account = document.getElementById('account').value;
     
     if(nftsAmount === undefined || nftsAmount === null || nftsAmount <= 0){
         alert('Amount of nfts empty or with a invalid number. Please enter a number greater than 0.');
@@ -13,7 +14,8 @@ function MintNfts(){
     }
 
     const message = {
-        amount: parseFloat(nftsAmount)
+        amount: parseFloat(nftsAmount),
+        account: account
     }
 
     fetch('http://localhost:3001/', {
