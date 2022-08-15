@@ -1,0 +1,25 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  },
+  "dependencies": {
+    "@hiveio/hive-js": "2.0.4",
+    "axios": "^0.27.2",
+    "canvas": "2.9.3",
+    "express": "4.18.1",
+    "ipfs-http-client": "56.0.3",
+    "nft.storage": "^7.0.0"
+  }
+}
